@@ -132,8 +132,8 @@ data_log_column_spec_t file_spec[] =
 	{"%hhu ",   &db_urms_status.plan_base_lvl[1], BASE_CHAR, REPLAY_USE},	//###87
 	{"%hhu ",   &db_urms_status.plan_base_lvl[2], BASE_CHAR, REPLAY_USE},	//###88
 	{"%hhu ",   &db_urms_status.hour, BASE_CHAR, REPLAY_USE},		//###89
-	{"%hhu ",   &db_urms_status.minute, BASE_CHAR, REPLAY_USE},		//###90
-	{"%hhu ",   &db_urms_status.second, BASE_CHAR, REPLAY_USE},		//###91
+	//{"%hhu ",   &db_urms_status.minute, BASE_CHAR, REPLAY_USE},		//###90
+	//{"%hhu ",   &db_urms_status.second, BASE_CHAR, REPLAY_USE},		//###91
 };
 
 #define NUM_FILE_COLUMNS sizeof(file_spec)/sizeof(data_log_column_spec_t)
