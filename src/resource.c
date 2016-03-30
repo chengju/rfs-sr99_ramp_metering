@@ -124,13 +124,13 @@ float occupancy_aggregation_mainline(db_urms_status_t *controller_data){
         return occupancy;
 }
 
-float speed_aggregation_mainline(db_urms_status_t *controller_data[]){
+float speed_aggregation_mainline(db_urms_status_t *controller_data){
 	float speed;
 
 	return speed;
 }
 
-float queue_onramp(db_urms_status_t *controller_data[]){
+float queue_onramp(db_urms_status_t *controller_data){
     float average_vehicle_length = 4.5; // average vehicle length 4.5 meters
 	float sum_inflow = 0; // sum up the inflow
 	float sum_outflow = 0; // sum up the outflow
@@ -146,12 +146,33 @@ float queue_onramp(db_urms_status_t *controller_data[]){
 	return queue;
 }
 
-float density_aggregation_mainline(db_urms_status_t *controller_data[]){
+float density_aggregation_mainline(db_urms_status_t *controller_data){
 	float density;
 
 	return density;
 }
 
+float data[3] = {0}; // add data bound here
+
+float add_cyclic_buffer_contents(float *data[]) {
+    // static 
+	float output = 0;
+	int i;
+
+	for( i = 1; i >= 0; i--)
+		data[i + 1] = data[i];
+
+	data[0] = datum;
+
+	for i = 0; i < 3; i++)
+		output += data[i];
+	
+	return output;
+}
+	
+temp1 = data[i-1];
+temp2 = data[i-2];
+temp3 = data[i-3];
 
 
 float flow_aggregation_3_lanes(float flow_lane_1,float flow_lane_2, float flow_lane_3)

@@ -3,7 +3,7 @@
 // Used by app.rc
 
 #pragma once
-
+#include <urms.h>
 extern float maxd(float a,float b);
 extern float mind(float a,float b);
 extern int open_file(char controller_data_file[]);
@@ -33,11 +33,11 @@ extern float get_on_ramp_flow_by_flow_balance(float upstream_total_flow, float d
 
 extern const char *controller_strings[];
 
-//extern float flow_aggregation_mainline(int num_lanes, db_urms_status_t *controller_data[]);
-//extern float flow_aggregation_onramp(int num_lanes, db_urms_status_t *controller_data[]);
-//extern float occupancy_aggregation_mainline(int num_lanes, db_urms_status_t *controller_data[]);
+extern float flow_aggregation_mainline(db_urms_status_t *controller_dat);
+extern float flow_aggregation_onramp(db_urms_status_t *controller_data);
+extern float occupancy_aggregation_mainline(db_urms_status_t *controller_data);
 
-//extern float queue_onramp(db_urms_status_t *controller_data[]);
-//extern float speed_aggregation_mainline(db_urms_status_t *controller_data[]);
-//extern float density_aggregation_mainline(db_urms_status_t *controller_data[]);
-//extern float turning_ratio_offramp(db_urms_status_t *controller_data[]);
+extern float queue_onramp(db_urms_status_t *controller_data);
+extern float speed_aggregation_mainline(db_urms_status_t *controller_data);
+extern float density_aggregation_mainline(db_urms_status_t *controller_data);
+extern float turning_ratio_offramp(db_urms_status_t *controller_data);
