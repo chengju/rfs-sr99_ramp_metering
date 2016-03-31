@@ -125,22 +125,48 @@ float occupancy_aggregation_mainline(db_urms_status_t *controller_data){
 }
 
 float speed_aggregation_mainline(db_urms_status_t *controller_data){
+	// compute harmonic mean of speed
 	float speed;
-
+    int j;
+    for(j=0 ; j < controller_data->num_main; j++) {
+            if(controller_data->mainline_stat[j].lead_stat == 2)
+                speed += 1/max((float)controller_data->mainline_stat[j].speed,1);
+            else
+                printf("Error %d controller %s detector %d\n",
+                    controller_data->mainline_stat[j].lead_stat,
+                    controller_strings[j],
+                    j
+                );
+	} 
+    speed /= controller_data->num_main;
+	speed = 1/speed;
 	return speed;
 }
 
 float queue_onramp(db_urms_status_t *controller_data){
     float average_vehicle_length = 4.5; // average vehicle length 4.5 meters
-	float sum_inflow = 0; // sum up the inflow
-	float sum_outflow = 0; // sum up the outflow
+	//float sum_inflow = 0; // sum up the inflow
+	//float sum_outflow = 0; // sum up the outflow
 	float queue = 0;
-	queue = (sum_inflow - sum_outflow)*average_vehicle_length;
-    
-	int queue_deteector_hit; // this actually a boolean variable  
-    float queue_max = 400;
-	if (queue_deteector_hit ==1) {
-	queue = queue_max; // reset the queue
+	float Max_queue[controller_data->num_meter]; //heck 
+          Max_queue[1]=400; // put on-ramp length table here
+	int j;
+	 for(j=0 ; j < controller_data->num_meter; j++) {
+		 if(controller_data->queue_stat[j].stat == 2){
+                queue += (float)controller_data->queue_stat[j].vol*average_vehicle_length;
+                // need to hack here, data base has no inflow detector value
+			    queue /= controller_data->num_meter; // average queue length
+		 }
+		 else if(controller_data->queue_stat[j].stat == 5){
+                queue = Max_queue[1]; // heck here  
+		 }
+		 else{ 
+			 printf("Error %d controller %s detector %d\n",
+                    controller_data->queue_stat[j].stat,
+                    controller_strings[j],
+                    j
+                );
+	      }
 	}
 
 	return queue;
@@ -148,32 +174,46 @@ float queue_onramp(db_urms_status_t *controller_data){
 
 float density_aggregation_mainline(db_urms_status_t *controller_data){
 	float density;
+	float flow;
+	float speed;
+    int j;
+	for(j=0 ; j < controller_data->num_main; j++) {
+		if(controller_data->mainline_stat[j].lead_stat == 2){
+                flow += (float)controller_data->mainline_stat[j].lead_vol; // total flow
+			    speed += (float)controller_data->mainline_stat[j].speed;
+			    speed /=  controller_data->num_main; // average speed
+				speed = maxd(speed,1);
+				density = flow/speed;
+		}else
+		{       printf("Error %d controller %s detector %d\n",
+                    controller_data->mainline_stat[j].lead_stat,
+                    controller_strings[j],
+                    j
+					);
+		}
+	}
 
 	return density;
 }
 
-float data[3] = {0}; // add data bound here
+//float data[3] = {0}; // add data bound here
 
-float add_cyclic_buffer_contents(float *data[]) {
-    // static 
-	float output = 0;
-	int i;
-
-	for( i = 1; i >= 0; i--)
-		data[i + 1] = data[i];
-
-	data[0] = datum;
-
-	for i = 0; i < 3; i++)
-		output += data[i];
+//float add_cyclic_buffer_contents(float *data[]) {
+//    // static 
+//	float output = 0;
+//	int i;
+//
+//	for( i = 1; i >= 0; i--)
+//		data[i + 1] = data[i];
+//
+//	data[0] = datum;
+//
+//	for i = 0; i < 3; i++)
+//		output += data[i];
+//	
+//	return output;
+//}
 	
-	return output;
-}
-	
-temp1 = data[i-1];
-temp2 = data[i-2];
-temp3 = data[i-3];
-
 
 float flow_aggregation_3_lanes(float flow_lane_1,float flow_lane_2, float flow_lane_3)
 {

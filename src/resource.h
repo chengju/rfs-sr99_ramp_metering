@@ -40,4 +40,4 @@ extern float occupancy_aggregation_mainline(db_urms_status_t *controller_data);
 extern float queue_onramp(db_urms_status_t *controller_data);
 extern float speed_aggregation_mainline(db_urms_status_t *controller_data);
 extern float density_aggregation_mainline(db_urms_status_t *controller_data);
-extern float turning_ratio_offramp(db_urms_status_t *controller_data);
+//extern float turning_ratio_offramp(db_urms_status_t *controller_data);
